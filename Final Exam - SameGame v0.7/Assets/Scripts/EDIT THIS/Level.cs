@@ -44,14 +44,6 @@ public class Level
     /// </summary>
     ElementGrid grid;
 
-    private int columnCount;
-    private int rowCount;
-
-    private List<int> topwall;
-    private List<int> bottomwall;
-    private List<int> leftwall;
-    private List<int> rightwall;
-
     //------STUDENTS IMPLEMENT FUNCTIONALITY BELOW---------------------------------------------------------------------
     //---Constructor---
     /// <summary>
@@ -71,8 +63,6 @@ public class Level
         points = 0;
         Random.InitState(seedForRandomNumberGenerator);
         // ***** Students Start here ******
-        columnCount = cellCount_X;
-        rowCount = cellCount_Y;
 
         for (int i = 0; i < grid.CellCount; i++)
         {
@@ -83,52 +73,8 @@ public class Level
             Debug.Log(i + " " + grid.GetElement(i).ElementType);
         }
 
-        PopulateWallLists();
-
     }
 
-    private void PopulateWallLists()
-    {
-        int index = 0;
-        topwall = new List<int>();
-        for (int i = 0; i < columnCount; i++)
-        {
-            if (index > grid.CellCount) break;
-
-            topwall.Add(index);
-            index += rowCount;
-        }
-
-        index = columnCount * (rowCount - 1);
-        bottomwall = new List<int>();
-        for (int i = 0; i < columnCount; i++)
-        {
-            if (index > grid.CellCount) break;
-
-            bottomwall.Add(index);
-            index += rowCount;
-        }
-
-        index = 0;
-        leftwall = new List<int>();
-        for (int i = 0; i < rowCount; i++)
-        {
-            if (index > grid.CellCount) break;
-
-            leftwall.Add(index);
-            index += columnCount;
-        }
-
-        index = columnCount - 1;
-        rightwall = new List<int>();
-        for (int i = 0; i < rowCount; i++)
-        {
-            if (index > grid.CellCount) break;
-
-            rightwall.Add(index);
-            index += columnCount;
-        }
-    }
 
 
     //---Methods---
@@ -140,6 +86,13 @@ public class Level
     /// <param name="worldPosition">Point in worldcoordinates (this position is not necessarily inside of the grid bounds).</param>
     public int HoverCells(Vector3 worldPosition)
     {
+        // calculate index of cell from mouse position (in world coordinates)
+        Element target = null;
+
+        // fetch adjacent elements of the same type
+
+        // rotate similar elements around y axis at 45* per second (accounting for the method beind called once a frame)
+
         // comment the out the following line
         return -99;
     }
@@ -166,41 +119,21 @@ public class Level
         // comment the out the following line
         //return null;
 
-        if (grid.GetElement(cellIndex) == null)
-        {
-            return null;
-        }
+        int[] neighbours = grid.GetNeighbours(cellIndex);
+        Element target = grid.GetElement(cellIndex);
+        List<int> result = new List<int>();
 
-        int[] cells = new int[5];
+        result.Add(cellIndex);
 
-        cells[0] = cellIndex;
+        for (int i = 0; i < neighbours.Length; i++)
+        {
+            if (grid.GetElement(neighbours[i]).ElementType == grid.GetElement(cellIndex).ElementType)
+            {
+                result.Add(neighbours[i]);
+            }
+        }   
 
-        // up    = -x
-        cells[1] = cellIndex - columnCount;
-        if (topwall.Contains(cellIndex))
-        {
-            cells[1] = -100;
-        }
-        // down  = +x
-        cells[2] = cellIndex + columnCount;
-        if (bottomwall.Contains(cellIndex))
-        {
-            cells[2] = -100;
-        }
-        // left  = -1
-        cells[3] = cellIndex - 1;
-        if (leftwall.Contains(cellIndex))
-        {
-            cells[3] = -100;
-        }
-        // right = +1
-        cells[4] = cellIndex + 1;
-        if (rightwall.Contains(cellIndex))
-        {
-            cells[4] = -100;
-        }
-
-        return cells;
+        return result.ToArray();
     }
 
     /// <summary>
