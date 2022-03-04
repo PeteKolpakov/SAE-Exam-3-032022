@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 /// <summary>
 /// Respresents a game level with a playground of cellCount_X * cellCount_Y elements.
@@ -43,6 +44,14 @@ public class Level
     /// </summary>
     ElementGrid grid;
 
+    private int columnCount;
+    private int rowCount;
+
+    private List<int> topwall;
+    private List<int> bottomwall;
+    private List<int> leftwall;
+    private List<int> rightwall;
+
     //------STUDENTS IMPLEMENT FUNCTIONALITY BELOW---------------------------------------------------------------------
     //---Constructor---
     /// <summary>
@@ -62,6 +71,9 @@ public class Level
         points = 0;
         Random.InitState(seedForRandomNumberGenerator);
         // ***** Students Start here ******
+        columnCount = cellCount_X;
+        rowCount = cellCount_Y;
+
         for (int i = 0; i < grid.CellCount; i++)
         {
             int rndVal = Random.Range(0, prefabs.Length);
@@ -71,7 +83,51 @@ public class Level
             Debug.Log(i + " " + grid.GetElement(i).ElementType);
         }
 
-        
+        PopulateWallLists();
+
+    }
+
+    private void PopulateWallLists()
+    {
+        int index = 0;
+        topwall = new List<int>();
+        for (int i = 0; i < columnCount; i++)
+        {
+            if (index > grid.CellCount) break;
+
+            topwall.Add(index);
+            index += rowCount;
+        }
+
+        index = columnCount * (rowCount - 1);
+        bottomwall = new List<int>();
+        for (int i = 0; i < columnCount; i++)
+        {
+            if (index > grid.CellCount) break;
+
+            bottomwall.Add(index);
+            index += rowCount;
+        }
+
+        index = 0;
+        leftwall = new List<int>();
+        for (int i = 0; i < rowCount; i++)
+        {
+            if (index > grid.CellCount) break;
+
+            leftwall.Add(index);
+            index += columnCount;
+        }
+
+        index = columnCount - 1;
+        rightwall = new List<int>();
+        for (int i = 0; i < rowCount; i++)
+        {
+            if (index > grid.CellCount) break;
+
+            rightwall.Add(index);
+            index += columnCount;
+        }
     }
 
 
@@ -108,7 +164,43 @@ public class Level
     public int[] GetAdjacentCellsOfSameType(int cellIndex)
     {
         // comment the out the following line
-        return null;
+        //return null;
+
+        if (grid.GetElement(cellIndex) == null)
+        {
+            return null;
+        }
+
+        int[] cells = new int[5];
+
+        cells[0] = cellIndex;
+
+        // up    = -x
+        cells[1] = cellIndex - columnCount;
+        if (topwall.Contains(cellIndex))
+        {
+            cells[1] = -100;
+        }
+        // down  = +x
+        cells[2] = cellIndex + columnCount;
+        if (bottomwall.Contains(cellIndex))
+        {
+            cells[2] = -100;
+        }
+        // left  = -1
+        cells[3] = cellIndex - 1;
+        if (leftwall.Contains(cellIndex))
+        {
+            cells[3] = -100;
+        }
+        // right = +1
+        cells[4] = cellIndex + 1;
+        if (rightwall.Contains(cellIndex))
+        {
+            cells[4] = -100;
+        }
+
+        return cells;
     }
 
     /// <summary>
