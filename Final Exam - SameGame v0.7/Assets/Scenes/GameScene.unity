@@ -345,7 +345,7 @@ MonoBehaviour:
   cellSize: {x: 1.2, y: 1.2}
   numberOfCellsPerRow: 15
   numberOfCellsPerColumn: 15
-  randomNumberSeed: 0
+  randomNumberSeed: 4
   prefabs:
   - {fileID: 126760456803605610, guid: 4372d9914cd98bd44beb0b1d593174ac, type: 3}
   - {fileID: 750786111271816359, guid: 3359776774caf674f9aeb570c868f136, type: 3}

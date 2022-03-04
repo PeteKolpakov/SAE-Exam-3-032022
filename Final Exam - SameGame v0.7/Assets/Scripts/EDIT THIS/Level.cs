@@ -60,8 +60,18 @@ public class Level
         // Don't delete the following lines
         grid = new ElementGrid(origin, cellSize, cellCount_X, cellCount_Y);
         points = 0;
-
+        Random.InitState(seedForRandomNumberGenerator);
         // ***** Students Start here ******
+        for (int i = 0; i < grid.CellCount; i++)
+        {
+            int rndVal = Random.Range(0, prefabs.Length);
+            grid.SetElement(i, new Element(prefabs[rndVal], rndVal));
+
+            GameObject.Instantiate(grid.GetElement(i).Visuals, grid.GetCellCenter(i), Quaternion.identity);
+            Debug.Log(i + " " + grid.GetElement(i).ElementType);
+        }
+
+        
     }
 
 
@@ -108,7 +118,9 @@ public class Level
     public LevelState CheckLevelState()
     {
         // comment the out the following line
-        return LevelState.NoElementsLeft;
+        //return LevelState.NoElementsLeft;
+
+        return LevelState.FurtherMovesPossible;
     }
 
     /// <summary>

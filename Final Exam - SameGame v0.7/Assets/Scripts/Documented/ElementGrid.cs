@@ -60,7 +60,7 @@ public class ElementGrid
         this.origin = origin;
         this.cellSize = cellSize;
 
-        //PrintGrid();
+        PrintGrid();
     }
 
 
