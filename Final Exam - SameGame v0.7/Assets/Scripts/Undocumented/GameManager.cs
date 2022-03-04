@@ -64,6 +64,20 @@ public class GameManager : MonoBehaviour
             GUILayout.Label("Your Score: " + currentLevel.Points, centerAlignmentStyle);
             GUILayout.EndArea();
         }
+
+        if (Input.GetMouseButtonUp(0))
+        {
+            GUI.skin.settings.cursorColor = Color.white;
+        }
+        else if (Input.GetMouseButtonDown(0))
+        {
+            GUI.skin.settings.cursorColor = Color.cyan;
+            // do nothing
+        }
+        else
+        {
+            GUI.skin.settings.cursorColor = Color.green;
+        }
     }
 
 
@@ -120,7 +134,7 @@ public class GameManager : MonoBehaviour
     }
 
     void OnMouseClick()
-    {
+    {       
         int numberOfSelectedCells = currentLevel.SelectCells(playerCamera.ScreenToWorldPoint(Input.mousePosition));
 
         switch (currentLevel.CheckLevelState())
