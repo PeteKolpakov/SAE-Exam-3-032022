@@ -73,8 +73,6 @@ public class Level
 
     }
 
-
-
     //---Methods---
     /// <summary>
     /// This Function implements the funcionality for MouseHover events. It is called each frame if no MouseClick is detected.
@@ -84,21 +82,21 @@ public class Level
     /// <param name="worldPosition">Point in worldcoordinates (this position is not necessarily inside of the grid bounds).</param>
     public int HoverCells(Vector3 worldPosition)
     {
-        
+
         // calculate index of cell from mouse position (in world coordinates)
         int index = grid.PointToIndex(worldPosition);
-        Debug.Log(index);
 
         if (index == -1)
         {
             return -1;
         }
         // fetch adjacent elements of the same type
-        int[] goodNeighbours = GetAdjacentCellsOfSameType(index);
+        List<int> allConnectedSpheres = GetValidNeighbours(index);
+
 
         // rotate similar elements around y axis at 45* per second (accounting for the method beind called once a frame)
         GameObject sphere = null;
-        foreach (var item in goodNeighbours)
+        foreach (var item in allConnectedSpheres)
         {
             sphere = grid.GetElement(item).Visuals;
             sphere.transform.RotateAround(sphere.transform.position, new Vector3(0, 1, 0), 45 * Time.deltaTime);
@@ -106,6 +104,30 @@ public class Level
 
         // comment the out the following line
         return index;
+    }
+
+    private List<int> GetValidNeighbours(int index)
+    {
+        int[] goodNeighbours = GetAdjacentCellsOfSameType(index);
+        List<int> allConnectedSpheres = new List<int>();
+        foreach (var item in goodNeighbours)
+        {
+            GetNeighborsOfNeighbors(allConnectedSpheres, item);
+        }
+
+        return allConnectedSpheres;
+    }
+
+    private void GetNeighborsOfNeighbors(List<int> allConnectedSpheres, int target)
+    {
+        int[] spheres = GetAdjacentCellsOfSameType(target);
+        foreach (var goodSphere in spheres)
+        {
+            if (!allConnectedSpheres.Contains(goodSphere))
+            {
+                allConnectedSpheres.Add(goodSphere);
+            }
+        }
     }
 
     /// <summary>
@@ -116,6 +138,22 @@ public class Level
     /// <param name="worldPosition">Point in worldcoordinates (this position is not necessarily inside of the grid bounds).</param>
     public int SelectCells(Vector3 worldPosition)
     {
+        int index = grid.PointToIndex(worldPosition);
+
+        if (index == -1)
+        {
+            return -1;
+        }
+
+        List<int> allConnectedSpheres = GetValidNeighbours(index);
+
+        if (allConnectedSpheres.Count > 1)
+        {
+            points += CalculatePoints(allConnectedSpheres.Count);
+            grid.RemoveElements(allConnectedSpheres.ToArray());
+        }
+
+
         // comment the out the following line
         return -99;
     }
@@ -155,6 +193,8 @@ public class Level
     {
         // comment the out the following line
         //return LevelState.NoElementsLeft;
+
+
 
         return LevelState.FurtherMovesPossible;
     }
