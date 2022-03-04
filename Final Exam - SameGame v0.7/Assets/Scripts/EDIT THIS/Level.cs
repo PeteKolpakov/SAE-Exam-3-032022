@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 /// <summary>
@@ -116,6 +117,31 @@ public class Level
         }
 
         return allConnectedSpheres;
+
+        /// Below is a much more functional implementation of the get connected spheres algorythm, but i did not have enough time
+        /// to get it to work, it is a very simplified version of the a* pathfinding system. but i lost half an hour trying to get the 
+        /// cursor to work which was impossible with the sprites that were given to us :(
+
+        //var toSearch = new List<int>();
+        //var processed = new List<int>();
+
+        //toSearch.Add(index);
+
+        //while (toSearch.Any())
+        //{
+        //    var current = toSearch[0];
+        //    int[] goodNeighbours = GetAdjacentCellsOfSameType(current);
+        //    foreach (var item in goodNeighbours)
+        //    {
+        //        if (!toSearch.Contains(item))
+        //        {
+        //            toSearch.Add(item);
+        //        }
+        //    }
+        //    toSearch.Remove(current);
+        //    processed.Add(current);
+        //}
+        //return processed;
     }
 
     private void GetNeighborsOfNeighbors(List<int> allConnectedSpheres, int target)
@@ -180,7 +206,7 @@ public class Level
             {
                 result.Add(neighbours[i]);
             }
-        }   
+        }
 
         return result.ToArray();
     }
