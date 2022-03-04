@@ -67,10 +67,8 @@ public class Level
         for (int i = 0; i < grid.CellCount; i++)
         {
             int rndVal = Random.Range(0, prefabs.Length);
-            grid.SetElement(i, new Element(prefabs[rndVal], rndVal));
-
-            GameObject.Instantiate(grid.GetElement(i).Visuals, grid.GetCellCenter(i), Quaternion.identity);
-            Debug.Log(i + " " + grid.GetElement(i).ElementType);
+            var sphere = GameObject.Instantiate(prefabs[rndVal], grid.GetCellCenter(i), Quaternion.identity);
+            grid.SetElement(i, new Element(sphere, rndVal));            
         }
 
     }
@@ -86,15 +84,28 @@ public class Level
     /// <param name="worldPosition">Point in worldcoordinates (this position is not necessarily inside of the grid bounds).</param>
     public int HoverCells(Vector3 worldPosition)
     {
+        
         // calculate index of cell from mouse position (in world coordinates)
-        Element target = null;
+        int index = grid.PointToIndex(worldPosition);
+        Debug.Log(index);
 
+        if (index == -1)
+        {
+            return -1;
+        }
         // fetch adjacent elements of the same type
+        int[] goodNeighbours = GetAdjacentCellsOfSameType(index);
 
         // rotate similar elements around y axis at 45* per second (accounting for the method beind called once a frame)
+        GameObject sphere = null;
+        foreach (var item in goodNeighbours)
+        {
+            sphere = grid.GetElement(item).Visuals;
+            sphere.transform.RotateAround(sphere.transform.position, new Vector3(0, 1, 0), 45 * Time.deltaTime);
+        }
 
         // comment the out the following line
-        return -99;
+        return index;
     }
 
     /// <summary>
