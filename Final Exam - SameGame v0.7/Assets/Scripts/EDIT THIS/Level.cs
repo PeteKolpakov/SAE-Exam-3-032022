@@ -119,7 +119,11 @@ public class Level
     public int CalculatePoints(int numElements)
     {
         // comment the out the following line
-        return -99;
+        //return -99;
+
+        //Points = (Amount of Stones - 2)²
+
+        return (int)Mathf.Pow(numElements - 2, 2);
     }
 
     /// <summary>

@@ -347,9 +347,9 @@ MonoBehaviour:
   numberOfCellsPerColumn: 15
   randomNumberSeed: 0
   prefabs:
-  - {fileID: 3168117313235638801, guid: 080530203ca527240b0f4b11c66b9162, type: 3}
-  - {fileID: 3168117313235638801, guid: 080530203ca527240b0f4b11c66b9162, type: 3}
-  - {fileID: 3168117313235638801, guid: 080530203ca527240b0f4b11c66b9162, type: 3}
+  - {fileID: 126760456803605610, guid: 4372d9914cd98bd44beb0b1d593174ac, type: 3}
+  - {fileID: 750786111271816359, guid: 3359776774caf674f9aeb570c868f136, type: 3}
+  - {fileID: 3751824438488389997, guid: bf68bc43ff7c5d34691a9ede2dcc72f7, type: 3}
   - {fileID: 7806864672341292300, guid: ce1f1c5f57d045d4f88cc526fcffda03, type: 3}
   - {fileID: 3168117313235638801, guid: 080530203ca527240b0f4b11c66b9162, type: 3}
   playerCamera: {fileID: 963194227}
